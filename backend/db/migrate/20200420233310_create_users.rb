@@ -6,6 +6,9 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :email
       t.string :img
       t.string :gid
+      t.integer :zip
+      t.float :lat 
+      t.float :lng
 
       t.timestamps
     end

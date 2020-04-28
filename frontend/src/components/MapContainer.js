@@ -12,7 +12,7 @@ const userURL = 'http://localhost:4000/users/';
 class MapContainer extends React.Component {
   state = {
     //Map State
-    //Pull from User location
+    //TODO:Pull from User location
     center: {
       lat: 30.2672,
       lng: -97.7431,
@@ -27,6 +27,7 @@ class MapContainer extends React.Component {
     this.fetchUserPlaces();
   };
 
+  //TODO: expose this to parent
   fetchUserPlaces = () => {
     fetch(userURL + this.props.user.gid + '/places', {
       method: 'GET',
@@ -75,7 +76,7 @@ class MapContainer extends React.Component {
       top: '1%',
     };
 
-    const api_key = process.env.REACT_APP_API_KEY
+    const api_key = process.env.REACT_APP_API_KEY;
 
     return (
       <LoadScript
@@ -83,6 +84,17 @@ class MapContainer extends React.Component {
         googleMapsApiKey={api_key}
         libraries={this.state.libraries}
       >
+        <StandaloneSearchBox
+          onLoad={this.searchLoaded}
+          onPlacesChanged={this.getPlace}
+          // bounds={[500]}
+        >
+          <input
+            type='text'
+            placeholder='Search places near you...'
+            style={inputStyle}
+          />
+        </StandaloneSearchBox>
         <GoogleMap
           id='example-map'
           mapContainerStyle={{
@@ -92,16 +104,6 @@ class MapContainer extends React.Component {
           zoom={14}
           center={this.state.center}
         >
-          <StandaloneSearchBox
-            onLoad={this.searchLoaded}
-            onPlacesChanged={this.getPlace}
-          >
-            <input
-              type='text'
-              placeholder='Search places near you...'
-              style={inputStyle}
-            />
-          </StandaloneSearchBox>
           {
             //TODO: Only create markers for unique entries
           }

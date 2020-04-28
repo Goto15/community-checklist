@@ -15,7 +15,7 @@ class App extends React.Component {
       user: null,
       places: null,
       scope: 'openid profile email',
-      selectedPlace: null
+      selectedPlace: null,
     };
   }
 
@@ -56,11 +56,6 @@ class App extends React.Component {
           console.log("You haven't signed up yet.");
         }
       });
-      this.getUserPlaces(gid);
-  };
-
-  getLocalStorage = () => {
-    this.fetchUserInfo(localStorage.getItem('User'));
   };
 
   getUserPlaces = (gid) => {
@@ -71,22 +66,22 @@ class App extends React.Component {
         'Content-Type': 'application/json',
       },
     })
-      .then(resp => resp.json())
-      .then(places => {
-        if (places != null){
+      .then((resp) => resp.json())
+      .then((places) => {
+        if (places != null) {
           this.setState({
-            places
-          })
+            places,
+          });
         } else {
-          console.log('Error getting places.')
+          console.log('Error getting places.');
         }
-      })
-  }
+      });
+  };
 
   loginUser = (response) => {
-    if (response) {
-      let currentUser = response.getBasicProfile();
-      this.fetchUserInfo(currentUser.getId());
+    let user = this.parseUserInfo(response);
+    if (user) {
+      this.fetchUserInfo(user.gid);
     } else {
       //TODO: Throw error handling here for nonexistant users.
       console.log('No response.');
@@ -98,24 +93,35 @@ class App extends React.Component {
     localStorage.removeItem('User');
   };
 
+  //Takes a Google response and returns User info.
+  parseUserInfo = (response) => {
+    let userInfo = null;
+
+    if (response) {
+      let basicProfile = response.getBasicProfile();
+      userInfo = {
+        gid: basicProfile.getId(),
+        first_name: basicProfile.getGivenName(),
+        last_name: basicProfile.getFamilyName(),
+        img: basicProfile.getImageUrl(),
+        email: basicProfile.getEmail(),
+      };
+    }
+
+    return userInfo;
+  };
+
   setSelectedPlace = (place) => {
     this.setState({
-      selectedPlace: place
-    })
-  }
+      selectedPlace: place,
+    });
+  };
 
   //TODO: Needs more robust error handling
-  //TODO: bug where sign in doesn't automatically log user in
+  //TODO: Add some welcome screen and set user location
   signUpUser = (response) => {
-    if (response) {
-      response = response.getBasicProfile()
-      let newUser = {
-          gid: response.getId(),
-          first_name: response.getGivenName(),
-          last_name: response.getFamilyName(),
-          img: response.getImageUrl(),
-          email: response.getEmail(),
-      }
+    let newUser = this.parseUserInfo(response);
+    if (newUser) {
       fetch(userURL, {
         method: 'POST',
         headers: {
@@ -134,12 +140,13 @@ class App extends React.Component {
         .then((user) => {
           if (user) {
             this.setState({
-              user: newUser
+              user: newUser,
             });
           } else {
             console.log('Unable to create new user.');
           }
         });
+      this.fetchUserInfo(newUser.gid);
     } else {
       //TODO: throw errors for handling existing users.
       console.log('No response.');
@@ -151,7 +158,7 @@ class App extends React.Component {
       height: '50vh',
       width: '100vw',
     };
-    const clientID = process.env.REACT_APP_CLIENT_ID
+    const clientID = process.env.REACT_APP_CLIENT_ID;
 
     return (
       <div className='App'>
@@ -167,18 +174,23 @@ class App extends React.Component {
         </header>
         {this.state.user ? (
           <Fragment>
-            <MapContainer 
+            <MapContainer
               style={style}
               user={this.state.user}
               setSelectedPlace={this.setSelectedPlace}
             />
             {this.state.selectedPlace ? (
-              <SelectedPlace selectedPlace={this.state.selectedPlace}/> 
-              ) : null}
-            {this.state.places ? (
-              //TODO: Add count and visit date to Place
-              this.state.places.map((place, index) => <PlaceInfo key={index} place={place} />)
+              <SelectedPlace
+                selectedPlace={this.state.selectedPlace}
+                getUserPlaces={this.getUserPlaces}
+              />
             ) : null}
+            {this.state.places
+              ? //TODO: Add count and visit date to Place
+                this.state.places.map((place, index) => (
+                  <PlaceInfo key={index} place={place} />
+                ))
+              : null}
           </Fragment>
         ) : null}
       </div>
