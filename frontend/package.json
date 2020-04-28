@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.9.11",
+    "@material-ui/icons": "^4.9.1",
+    "@react-google-maps/api": "^1.8.8-alpha",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "dotenv": "^8.2.0",
+    "google-maps-react": "^2.0.6",
+    "material-ui-search-bar": "^0.4.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-load-script": "0.0.6",
     "react-scripts": "3.4.1"
   },
   "scripts": {
