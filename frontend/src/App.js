@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import NavBar from './components/NavBar';
 import MapContainer from './components/MapContainer';
 import SelectedPlace from './components/SelectedPlace';
 import PlaceInfo from './components/PlaceInfo';
+import UserLocation from './components/UserLocation';
 import './App.css';
 require('dotenv').config();
 
@@ -44,13 +45,7 @@ class App extends React.Component {
       .then((json) => {
         if (json != null) {
           this.setState({
-            user: {
-              gid: json.gid,
-              first_name: json.first_name,
-              last_name: json.last_name,
-              img: json.img,
-              email: json.email,
-            },
+            user: json
           });
         } else {
           console.log("You haven't signed up yet.");
@@ -99,6 +94,7 @@ class App extends React.Component {
 
     if (response) {
       let basicProfile = response.getBasicProfile();
+      console.log(basicProfile)
       userInfo = {
         gid: basicProfile.getId(),
         first_name: basicProfile.getGivenName(),
@@ -138,6 +134,7 @@ class App extends React.Component {
       })
         .then((resp) => resp.json())
         .then((user) => {
+          console.log(user);
           if (user) {
             this.setState({
               user: newUser,
@@ -146,6 +143,7 @@ class App extends React.Component {
             console.log('Unable to create new user.');
           }
         });
+      this.setState({ newUser: true });
       this.fetchUserInfo(newUser.gid);
     } else {
       //TODO: throw errors for handling existing users.
@@ -161,38 +159,46 @@ class App extends React.Component {
     const clientID = process.env.REACT_APP_CLIENT_ID;
 
     return (
-      <div className='App'>
+      <div>
         {this.state.user ? localStorage.setItem('User', this.state.user.gid) : null}
-        <header className='App-header'>
-          <NavBar
-            clientID={clientID}
-            loginUser={this.loginUser}
-            signUpUser={this.signUpUser}
-            logoutUser={this.logoutUser}
-            loggedIn={this.state.user != null}
-          />
-        </header>
-        {this.state.user ? (
-          <Fragment>
-            <MapContainer
-              style={style}
-              user={this.state.user}
-              setSelectedPlace={this.setSelectedPlace}
-            />
-            {this.state.selectedPlace ? (
-              <SelectedPlace
-                selectedPlace={this.state.selectedPlace}
-                getUserPlaces={this.getUserPlaces}
-              />
-            ) : null}
-            {this.state.places
-              ? //TODO: Add count and visit date to Place
-                this.state.places.map((place, index) => (
-                  <PlaceInfo key={index} place={place} />
-                ))
-              : null}
-          </Fragment>
-        ) : null}
+        <NavBar
+          clientID={clientID}
+          loginUser={this.loginUser}
+          signUpUser={this.signUpUser}
+          logoutUser={this.logoutUser}
+          loggedIn={this.state.user != null}
+        />
+        <div className='content'>
+          {(this.state.user && (this.state.user.lat === null)) ? (
+              <UserLocation
+                user={this.state.user}
+              /> 
+          ) : (
+            <div>
+              {this.state.user ? (
+                <MapContainer
+                  style={style}
+                  user={this.state.user}
+                  setSelectedPlace={this.setSelectedPlace}
+                />
+              ) : null}
+              {this.state.selectedPlace != null? (
+                <SelectedPlace
+                  selectedPlace={this.state.selectedPlace}
+                  getUserPlaces={this.getUserPlaces}
+                  parseUserInfo={this.parseUserInfo}
+                />
+              ) : null}
+              { //TODO: Add count and visit date to Place
+                this.state.user && this.state.places ? 
+                  (this.state.places.map((place, index) => (
+                    <PlaceInfo key={index} place={place} />
+                  ))): null
+              } 
+            </div>
+            )
+          }
+        </div>
       </div>
     );
   }

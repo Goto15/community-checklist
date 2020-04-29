@@ -1,6 +1,7 @@
 import React from 'react';
 
 class PlaceInfo extends React.Component{
+
   render(){
     return(
       <div>

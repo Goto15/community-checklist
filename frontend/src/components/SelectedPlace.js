@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 const userPlaceURL = 'http://localhost:4000/user_places/';
 
 class SelectedPlace extends React.Component {
   state = {
-    place: null
+    place: null,
   };
 
   componentDidMount = () => {
@@ -16,6 +16,8 @@ class SelectedPlace extends React.Component {
   addPlace = () => {
     let user = localStorage.getItem('User');
     let place = this.props.selectedPlace;
+    let date = document.getElementById('visit-date').value;
+    console.log(date)
 
     fetch(userPlaceURL, {
       method: 'POST',
@@ -41,20 +43,25 @@ class SelectedPlace extends React.Component {
   };
 
   render() {
+    
+    //TODO: Add place information before button
+    //TODO: update map with new places
+    
     return (
       <div>
-      {this.state.place ? (
-        <Fragment>
-          Name: {this.state.place.name}
-          {console.log(this.state.place)}
-          <button onClick={this.addPlace}>Add Place</button>
-        </Fragment>
-      ) : null}
-        {
-          //TODO: Add place information before button
-          //TODO: update map with new places
-        }
-        
+        {this.state.place ? (
+          <div>
+            Name: {this.state.place.name}
+            <br />
+            Address: {this.state.place.address}
+            <br />
+            <a href='this.state.place.website'>Website</a>
+            <br />
+            <input type='date' id='visit-date'></input>
+            <br />
+            <button onClick={this.addPlace}>Add Place</button>
+          </div>
+        ) : null}
       </div>
     );
   }

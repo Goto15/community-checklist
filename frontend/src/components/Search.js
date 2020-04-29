@@ -9,7 +9,6 @@ class Search extends React.Component {
   //TODO: add functionality here
   handleChange = (event) => {
     this.setState({ query: event.target.value });
-    // console.log(this.props.google);
   };
 
   /* global google */
