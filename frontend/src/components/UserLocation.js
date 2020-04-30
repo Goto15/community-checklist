@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import TextField from '@material-ui/core/TextField';
 
 const geocodingURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
@@ -9,17 +9,24 @@ class UserLocation extends React.Component{
   getValue = (event) => {
     if (event.key === 'Enter') {
       let address = event.target.value.split(' ').join('+');
-      console.log(geocodingURL + address + API_Key);
       fetch(geocodingURL + address + API_Key, {})
         .then((resp) => resp.json())
         .then((json) => {
-            json.results.forEach(element => {
-              console.log('Address: ' + element.formatted_address);
-              console.log('Lat: ' + element.geometry.location.lat);
-              console.log('Lat: ' + element.geometry.location.lng);
-            })
-          }
-        )
+          if(json != null){
+              let zip = null;
+              json.results[0].address_components.forEach(component => {
+                if(component.types[0] === 'postal_code'){
+                  zip = component.long_name
+                }
+              })
+              this.props.setUser({
+                ...this.props.user,
+                lat: json.results[0].geometry.location.lat,
+                lng: json.results[0].geometry.location.lng,
+                zip: zip
+              })
+            }
+        })
     }
   };
 

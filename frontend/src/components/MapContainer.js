@@ -9,6 +9,7 @@ import {
 require('dotenv').config();
 
 const userURL = 'http://localhost:4000/users/';
+const api_key = process.env.REACT_APP_API_KEY;
 
 class MapContainer extends React.Component {
   state = {
@@ -18,7 +19,6 @@ class MapContainer extends React.Component {
       lat: 30.2672,
       lng: -97.7431,
     },
-    places: [],
     //Marker and Info Window State
     activeMarker: {},
     libraries: ['places'],
@@ -26,6 +26,12 @@ class MapContainer extends React.Component {
 
   componentDidMount = () => {
     this.fetchUserPlaces();
+    this.setState({
+      center: {
+        lat: this.props.user.lat,
+        lng: this.props.user.lng
+      }
+    })
   };
 
   //TODO: expose this to parent
@@ -51,7 +57,6 @@ class MapContainer extends React.Component {
   };
 
   render() {
-    const api_key = process.env.REACT_APP_API_KEY;
 
     //TODO: Only create markers for unique entries
     return (
@@ -72,18 +77,20 @@ class MapContainer extends React.Component {
           <MapSearch 
             setSelectedPlace={this.props.setSelectedPlace}
           />
-          {this.state.places.map((p, index) => {
-            return (
-              <Marker
-                key={index}
-                position={{
-                  lat: p.lat,
-                  lng: p.lng,
-                }}
-                onClick={(event) => this.onMarkerClick(event, p)}
-              />
-            );
-          })}
+          {this.props.places ? (
+              this.props.places.map((p, index) => {
+              return (
+                <Marker
+                  key={index}
+                  position={{
+                    lat: p.lat,
+                    lng: p.lng,
+                  }}
+                  onClick={(event) => this.onMarkerClick(event, p)}
+                />
+              );
+            })
+          ) : null}
         </GoogleMap>
       </LoadScript>
     );

@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2020_04_21_191543) do
   create_table "user_places", force: :cascade do |t|
     t.integer "user_id"
     t.integer "place_id"
+    t.datetime "visited"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

@@ -20,7 +20,7 @@ class UserPlacesController < ApplicationController
       place.save
     end
 
-    UserPlace.create(user_id: user.id, place_id: place.id)
+    UserPlace.create(user_id: user.id, place_id: place.id, visited: params[:visited])
     redirect_to place_path(place.id)
   end
 end

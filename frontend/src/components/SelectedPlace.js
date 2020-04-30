@@ -1,4 +1,11 @@
 import React from 'react';
+import {
+  Button,
+  Card,
+  Input,
+  Link,
+  Typography,
+} from '@material-ui/core';
 
 const userPlaceURL = 'http://localhost:4000/user_places/';
 
@@ -17,7 +24,6 @@ class SelectedPlace extends React.Component {
     let user = localStorage.getItem('User');
     let place = this.props.selectedPlace;
     let date = document.getElementById('visit-date').value;
-    console.log(date)
 
     fetch(userPlaceURL, {
       method: 'POST',
@@ -34,6 +40,7 @@ class SelectedPlace extends React.Component {
         lng: place.geometry.location.lng(),
         name: place.name,
         website: place.website,
+        visited: date,
       }),
     })
       .then((resp) => resp.json())
@@ -43,24 +50,48 @@ class SelectedPlace extends React.Component {
   };
 
   render() {
-    
+    const card = {
+      maxWidth: '450px',
+      margin: '5px',
+      padding: '15px',
+    };
     //TODO: Add place information before button
-    //TODO: update map with new places
-    
+
     return (
       <div>
-        {this.state.place ? (
-          <div>
-            Name: {this.state.place.name}
+        {this.props.selectedPlace ? (
+          <Card style={card} variant='outlined'>
+            {
+              //Add og:image here in CardMedia
+            }
+            <Typography variant='h5' component='h2'>
+              {this.props.selectedPlace.name}
+            </Typography>
+            <Typography
+              gutterBottom
+              variant='body2'
+              color='textSecondary'
+              component='h2'
+            >
+              {this.props.selectedPlace.address}
+            </Typography>
+            <Typography variant='subtitle1'>
+              {this.props.selectedPlace.phone}
+            </Typography>
+            <Link 
+              target="_blank"
+              href={this.props.selectedPlace.website}
+              variant='subtitle1'
+            >
+              Website
+            </Link>
             <br />
-            Address: {this.state.place.address}
+            <Input 
+              type="datetime-local"
+            ></Input>
             <br />
-            <a href='this.state.place.website'>Website</a>
-            <br />
-            <input type='date' id='visit-date'></input>
-            <br />
-            <button onClick={this.addPlace}>Add Place</button>
-          </div>
+            <Button onClick={this.addPlace}>Add Place</Button>
+          </Card>
         ) : null}
       </div>
     );

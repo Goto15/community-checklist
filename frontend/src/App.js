@@ -42,11 +42,9 @@ class App extends React.Component {
       },
     })
       .then((resp) => resp.json())
-      .then((json) => {
-        if (json != null) {
-          this.setState({
-            user: json
-          });
+      .then((user) => {
+        if (user != null) {
+          this.setState({ user });
         } else {
           console.log("You haven't signed up yet.");
         }
@@ -77,6 +75,7 @@ class App extends React.Component {
     let user = this.parseUserInfo(response);
     if (user) {
       this.fetchUserInfo(user.gid);
+      this.getUserPlaces(user.gid);
     } else {
       //TODO: Throw error handling here for nonexistant users.
       console.log('No response.');
@@ -84,7 +83,11 @@ class App extends React.Component {
   };
 
   logoutUser = () => {
-    this.setState({ user: null });
+    this.setState({
+      user: null,
+      selectedPlace: null,
+      places: null,
+    });
     localStorage.removeItem('User');
   };
 
@@ -94,7 +97,6 @@ class App extends React.Component {
 
     if (response) {
       let basicProfile = response.getBasicProfile();
-      console.log(basicProfile)
       userInfo = {
         gid: basicProfile.getId(),
         first_name: basicProfile.getGivenName(),
@@ -113,38 +115,45 @@ class App extends React.Component {
     });
   };
 
+  setUser = (user) => {
+    this.setState({ user });
+    fetch(userURL + user.gid, {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        lat: user.lat,
+        lng: user.lng,
+        zip: user.zip,
+      }),
+    });
+  };
+
   //TODO: Needs more robust error handling
-  //TODO: Add some welcome screen and set user location
   signUpUser = (response) => {
-    let newUser = this.parseUserInfo(response);
-    if (newUser) {
+    let user = this.parseUserInfo(response);
+    if (user) {
       fetch(userURL, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          gid: newUser.gid,
-          first_name: newUser.first_name,
-          last_name: newUser.last_name,
-          img: newUser.img,
-          email: newUser.email,
-        }),
+        body: JSON.stringify({ user }),
       })
         .then((resp) => resp.json())
         .then((user) => {
-          console.log(user);
           if (user) {
             this.setState({
-              user: newUser,
+              user,
             });
           } else {
             console.log('Unable to create new user.');
           }
         });
-      this.setState({ newUser: true });
-      this.fetchUserInfo(newUser.gid);
+      this.fetchUserInfo(user.gid);
     } else {
       //TODO: throw errors for handling existing users.
       console.log('No response.');
@@ -169,10 +178,8 @@ class App extends React.Component {
           loggedIn={this.state.user != null}
         />
         <div className='content'>
-          {(this.state.user && (this.state.user.lat === null)) ? (
-              <UserLocation
-                user={this.state.user}
-              /> 
+          {this.state.user && this.state.user.lat === null ? (
+            <UserLocation user={this.state.user} setUser={this.setUser} />
           ) : (
             <div>
               {this.state.user ? (
@@ -180,24 +187,27 @@ class App extends React.Component {
                   style={style}
                   user={this.state.user}
                   setSelectedPlace={this.setSelectedPlace}
+                  places={this.state.places}
                 />
               ) : null}
-              {this.state.selectedPlace != null? (
+              {this.state.selectedPlace != null ? (
                 <SelectedPlace
                   selectedPlace={this.state.selectedPlace}
                   getUserPlaces={this.getUserPlaces}
                   parseUserInfo={this.parseUserInfo}
+                  setSelectedPlace={this.setSelectedPlace}
                 />
               ) : null}
-              { //TODO: Add count and visit date to Place
-                this.state.user && this.state.places ? 
-                  (this.state.places.map((place, index) => (
-                    <PlaceInfo key={index} place={place} />
-                  ))): null
-              } 
+              {
+                //TODO: Add count and visit date to Place
+                this.state.user && this.state.places
+                  ? this.state.places.map((place, index) => (
+                      <PlaceInfo key={index} place={place} />
+                    ))
+                  : null
+              }
             </div>
-            )
-          }
+          )}
         </div>
       </div>
     );
