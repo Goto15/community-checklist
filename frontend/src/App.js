@@ -1,4 +1,5 @@
 import React from 'react';
+import Landing from './components/Landing';
 import NavBar from './components/NavBar';
 import MapContainer from './components/MapContainer';
 import SelectedPlace from './components/SelectedPlace';
@@ -83,6 +84,7 @@ class App extends React.Component {
   };
 
   logoutUser = () => {
+    console.log('Logging out')
     this.setState({
       user: null,
       selectedPlace: null,
@@ -178,7 +180,11 @@ class App extends React.Component {
           loggedIn={this.state.user != null}
         />
         <div className='content'>
+          {this.state.user === null ? (
+            <Landing/>
+          ) : null}
           {this.state.user && this.state.user.lat === null ? (
+            //TODO: List out possibilities
             <UserLocation user={this.state.user} setUser={this.setUser} />
           ) : (
             <div>
@@ -199,11 +205,11 @@ class App extends React.Component {
                 />
               ) : null}
               {
-                //TODO: Add count and visit date to Place
+                //TODO: Add count to Place
                 this.state.user && this.state.places
                   ? this.state.places.map((place, index) => (
                       <PlaceInfo key={index} place={place} />
-                    ))
+                    )).reverse()
                   : null
               }
             </div>

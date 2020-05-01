@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
 const geocodingURL = 'https://maps.googleapis.com/maps/api/geocode/json?address=';

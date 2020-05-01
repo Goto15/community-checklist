@@ -6,7 +6,17 @@ class MapSearch extends React.Component{
   //TODO: add search selection and option to add to places
   //TODO: cull correct fields to pass to setSelectedPlace
   getPlace = () => {
-    this.props.setSelectedPlace(this.searchBox.getPlaces()[0]);
+    let sp = this.searchBox.getPlaces()[0]
+    let place = {
+      address: sp.formatted_address,
+      phone: sp.formatted_phone_number,
+      lat: sp.geometry.location.lat(),
+      lng: sp.geometry.location.lng(),
+      name: sp.name,
+      gid: sp.place_id,
+      website: sp.website
+    }
+    this.props.setSelectedPlace(place);
   };
 
   searchLoaded = (ref) => {

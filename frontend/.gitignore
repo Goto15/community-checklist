@@ -25,3 +25,6 @@ yarn-error.log*
 # Secret Credentials
 credentials.json
 .env
+
+
+frontend/src/assets

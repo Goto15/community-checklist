@@ -20,9 +20,9 @@ class SelectedPlace extends React.Component {
     });
   };
 
+  //TODO: Add city/neighborhood
   addPlace = () => {
     let user = localStorage.getItem('User');
-    let place = this.props.selectedPlace;
     let date = document.getElementById('visit-date').value;
 
     fetch(userPlaceURL, {
@@ -33,19 +33,20 @@ class SelectedPlace extends React.Component {
       },
       body: JSON.stringify({
         user_gid: user,
-        place_gid: place.place_id,
-        address: place.formatted_address,
-        phone: place.formatted_phone_number,
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
-        name: place.name,
-        website: place.website,
+        place_gid: this.state.place.gid,
+        address: this.state.place.address,
+        phone: this.state.place.phone,
+        lat: this.state.place.lat,
+        lng: this.state.place.lng,
+        name: this.state.place.name,
+        website: this.state.place.website,
         visited: date,
       }),
     })
       .then((resp) => resp.json())
       .then((json) => {
         this.props.getUserPlaces(localStorage.getItem('User'));
+        this.props.setSelectedPlace(null)
       });
   };
 
@@ -87,6 +88,7 @@ class SelectedPlace extends React.Component {
             </Link>
             <br />
             <Input 
+              id='visit-date'
               type="datetime-local"
             ></Input>
             <br />

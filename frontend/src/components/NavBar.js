@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
-import { TextField, AppBar, Toolbar } from '@material-ui/core';
+import { AppBar, Toolbar, Button } from '@material-ui/core';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
-// import Search from './Search'
 
 class NavBar extends React.Component {
   constructor() {
@@ -41,21 +40,35 @@ class NavBar extends React.Component {
             <Fragment>
               <GoogleLogin
                 clientId={this.props.clientID}
-                buttonText='Login'
                 onSuccess={this.props.loginUser}
                 onFailure={this.props.loginUser}
                 cookiePolicy={'single_host_origin'}
                 scope={this.state.scope}
-                theme={'dark'}
+                render={renderProps => (
+                  <Button 
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    variant="outlined"
+                  >
+                    Login
+                  </Button>
+                )}
               />
               <GoogleLogin
                 clientId={this.props.clientID}
-                buttonText='Sign Up'
                 onSuccess={this.props.signUpUser}
                 onFailure={this.props.signUpUser}
                 cookiePolicy={'single_host_origin'}
                 scope={this.state.scope}
-                theme={'dark'}
+                render={renderProps => (
+                  <Button 
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    variant="outlined"
+                  >
+                    SignUp
+                  </Button>
+                )}
               />
             </Fragment>
           )}
