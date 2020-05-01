@@ -4,6 +4,7 @@ class CreateUserPlaces < ActiveRecord::Migration[6.0]
       t.integer :user_id
       t.integer :place_id
       t.datetime :visited
+      t.text :notes
 
       t.timestamps
     end
