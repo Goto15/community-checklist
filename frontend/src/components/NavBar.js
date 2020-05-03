@@ -1,15 +1,18 @@
-import React, { Fragment } from 'react';
-import { AppBar, Toolbar, Button, IconButton, Typography } from '@material-ui/core';
+import React from 'react';
+import Login from './Login';
+import { AppBar, Toolbar, Link, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { GoogleLogout } from 'react-google-login';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
   menuButton: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 3,
+    flexGrow: 1,
   },
 }));
 
@@ -24,82 +27,60 @@ class NavBar extends React.Component {
   }
 
   render() {
+    const logoStyle = {
+      minWidth: '90%',
+    }
+
+    const basicBehavior = {
+      color: '#ffffff',
+      cursor: 'pointer'
+    }
+
     return (
-      <AppBar position='static'>
-        <Toolbar >
-          <Typography variant='h5' syle={{width: '60%'}} className={this.classes.title}>
-            Community Checklist
-          </Typography>
-          {
-            //<Search/>
-          }
-          {
-            //TODO: Set default value to current address
-          }
-          {/*
-            <TextField
-              id='location-change'
-              placeholder='Change your location'
-              onKeyPress={this.getValue}
-            />
-            */}
-            <div syle={{width: '40%'}} >
-                {this.props.loggedIn ? (
-                <GoogleLogout syle={{float:"right"}}
-                  clientId={this.props.clientID}
-                  buttonText='Log Out'
-                  onLogoutSuccess={this.props.logoutUser}
-                  theme={'dark'}
-                  render={(renderProps) => (
-                    <Button
-                      onClick={renderProps.onClick}
-                      disabled={renderProps.disabled}
-                      variant='outlined'
-                    >
-                      Logout
-                    </Button>
-                  )}
-                />
-              ) : (
-                <Fragment>
-                  <GoogleLogin syle={{float:"right"}}
-                    clientId={this.props.clientID}
-                    onSuccess={this.props.loginUser}
-                    onFailure={this.props.loginUser}
-                    cookiePolicy={'single_host_origin'}
-                    scope={this.state.scope}
-                    render={(renderProps) => (
-                      <Button
-                        onClick={renderProps.onClick}
-                        disabled={renderProps.disabled}
-                        variant='outlined'
-                      >
-                        Login
-                      </Button>
-                    )}
-                  />
-                  <GoogleLogin syle={{float:"right"}}
-                    clientId={this.props.clientID}
-                    onSuccess={this.props.signUpUser}
-                    onFailure={this.props.signUpUser}
-                    cookiePolicy={'single_host_origin'}
-                    scope={this.state.scope}
-                    render={(renderProps) => (
-                      <Button
-                        onClick={renderProps.onClick}
-                        disabled={renderProps.disabled}
-                        variant='outlined'
-                      >
-                        SignUp
-                      </Button>
-                    )}
-                  />
-                </Fragment>
-              )}
+      <div className={this.classes.root}>
+        <AppBar position='static'>
+          <Toolbar>
+            <div style={logoStyle}>
+              <Typography
+                variant='h5'
+                className={this.classes.title}
+              >
+                Community Checklist
+              </Typography>
             </div>
-          
-        </Toolbar>
-      </AppBar>
+            {this.props.loggedIn ? (
+              /*
+                props
+                clientId={this.props.clientID}
+                logoutUser={this.props.logoutUser}
+
+                location change component possibly
+              */
+              <GoogleLogout
+                clientId={this.props.clientID}
+                buttonText='Log Out'
+                onLogoutSuccess={this.props.logoutUser}
+                render={(renderProps) => (
+                  <Link
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                    style={basicBehavior}
+                  >
+                    Logout
+                  </Link>
+                )}
+              />
+            ) : (
+              <Login
+                clientID={this.props.clientID}
+                loginUser={this.props.loginUser}
+                scope={this.state.scope}
+                signUpUser={this.props.signUpUser}
+              />
+            )}
+          </Toolbar>
+        </AppBar>
+      </div>
     );
   }
 }

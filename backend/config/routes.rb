@@ -8,6 +8,6 @@ Rails.application.routes.draw do
   resources :types
   resources :place_types
 
-  get '/users/:id/places', to: 'users#places'
+  get '/users/:id/places', to: 'user_places#places'
 
 end

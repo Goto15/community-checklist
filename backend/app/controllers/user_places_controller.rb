@@ -20,7 +20,34 @@ class UserPlacesController < ApplicationController
       place.save
     end
 
-    UserPlace.create(user_id: user.id, place_id: place.id, visited: params[:visited])
+    UserPlace.create(user_id: user.id, place_id: place.id, visited: params[:visited], notes: params[:notes])
     redirect_to place_path(place.id)
+  end
+
+  def places
+    user = User.find_by(gid: params[:id])
+    userPlaces = UserPlace.where(user_id: user.id)
+  
+    places = userPlaces.map do |up|
+
+      place = Place.find(up.place_id)
+
+      placeNotes = {
+        address: place.address,
+        phone: place.phone,
+        lat: place.lat,
+        lng: place.lng,
+        name: place.name,
+        gid: place.gid,
+        website: place.website,
+        visited: place.visited,
+        notes: up.notes,
+        visited: up.visited
+      }
+
+      placeNotes
+    end
+
+    render json: places 
   end
 end

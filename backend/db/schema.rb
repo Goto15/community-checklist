@@ -45,7 +45,6 @@ ActiveRecord::Schema.define(version: 2020_05_01_181546) do
     t.string "name"
     t.string "gid"
     t.string "website"
-    t.date "visited"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

@@ -8,7 +8,6 @@ class CreatePlaces < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :gid
       t.string :website
-      t.date :visited
 
       t.timestamps
     end

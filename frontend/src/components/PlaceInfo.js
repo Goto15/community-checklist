@@ -8,34 +8,17 @@ class PlaceInfo extends React.Component {
     image: null,
   };
 
-  componentDidMount = () => {
-    // this.getWebPic();
-  };
-
-  getWebPic = () => {
-    fetch(this.props.place.website, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((resp) => resp.text())
-      .then((html) => {
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(html, 'text/html');
-        console.log(doc.querySelector('[property="og:image"]').content);
-        this.setState({
-          image: doc.querySelector('[property="og:image"]').content,
-        });
-      });
-  };
-
   render() {
     const card = {
-      maxWidth: '450px',
-      margin: '5px',
+      float: 'left',
+      height: '150px',
+      margin: '10px',
       padding: '15px',
+      width: '400px',
+    };
+
+    const noteStyle = {
+      padding: '5px',
     };
 
     return (
@@ -51,15 +34,23 @@ class PlaceInfo extends React.Component {
           variant='body2'
           color='textSecondary'
           component='h2'
+          style={{ overflow: 'hidden' }}
         >
           {this.props.place.address}
         </Typography>
         <Typography variant='subtitle1'>{this.props.place.phone}</Typography>
+        <Typography variant="h6">{this.props.place.visited}</Typography>
+        {
+          this.props.place.notes ? (
+            <Typography variant='body1' style={noteStyle}>
+              Notes: {this.props.place.notes}
+            </Typography>
+          ) : null }
         <CardActionArea
-          onClick={() => window.location.replace(this.props.place.website)}
+          onClick={() => window.open(this.props.place.website, '_blank')}
         >
           <CardActions>
-            <Link variant='subtitle1' target="_blank">Website</Link>
+            <Link variant='subtitle1'>Website</Link>
           </CardActions>
         </CardActionArea>
       </Card>

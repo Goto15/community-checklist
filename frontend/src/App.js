@@ -1,4 +1,5 @@
 import React from 'react';
+import { Fragment } from 'react';
 import Landing from './components/Landing';
 import NavBar from './components/NavBar';
 import MapContainer from './components/MapContainer';
@@ -167,6 +168,12 @@ class App extends React.Component {
       height: '50vh',
       width: '100vw',
     };
+
+    const visitedGrid = {
+      marginLeft: '2%',
+      width: '100vw',
+    };
+
     const clientID = process.env.REACT_APP_CLIENT_ID;
 
     return (
@@ -207,10 +214,20 @@ class App extends React.Component {
               {
                 //TODO: Add count to Place
                 this.state.user && this.state.places
-                  ? this.state.places.map((place, index) => (
-                      <PlaceInfo key={index} place={place} />
-                    )).reverse()
-                  : null
+                  ? (
+                    <Fragment>
+                    <div style={{textAlign: 'center'}}>
+                      <h2>Visited</h2>
+                    </div>
+                    <div className="visited-cards" style={visitedGrid}> 
+                      {
+                        this.state.places.map((place, index) => (
+                          <PlaceInfo key={index} place={place} />
+                        )).reverse()
+                      }
+                    </div>
+                    </Fragment>
+                  ) : null
               }
             </div>
           )}

@@ -4,7 +4,9 @@ import {
   Card,
   Input,
   Link,
+  TextField,
   Typography,
+  CardActionArea,
 } from '@material-ui/core';
 
 const userPlaceURL = 'http://localhost:4000/user_places/';
@@ -24,6 +26,8 @@ class SelectedPlace extends React.Component {
   addPlace = () => {
     let user = localStorage.getItem('User');
     let date = document.getElementById('visit-date').value;
+    let notes = document.getElementById('notes').value;
+    console.log(date);
 
     fetch(userPlaceURL, {
       method: 'POST',
@@ -40,6 +44,7 @@ class SelectedPlace extends React.Component {
         lng: this.state.place.lng,
         name: this.state.place.name,
         website: this.state.place.website,
+        notes: notes,
         visited: date,
       }),
     })
@@ -52,11 +57,30 @@ class SelectedPlace extends React.Component {
 
   render() {
     const card = {
-      maxWidth: '450px',
-      margin: '5px',
+      margin: '0 auto',
+      marginTop: '18px',
+      minWidth: '60%',
       padding: '15px',
+      width: '50%'
     };
+
+    const leftSide = {
+      display: 'grid',
+      float: 'left',
+      maxWidth: '50%'
+    }
+
+    const rightSide = {
+      display: 'grid',
+      float: 'right'
+    }
+
+    const spacing = {
+      marginBottom: '15px'
+    }
     //TODO: Add place information before button
+
+    let currentTime = new Date().toLocaleString();
 
     return (
       <div>
@@ -65,34 +89,54 @@ class SelectedPlace extends React.Component {
             {
               //Add og:image here in CardMedia
             }
-            <Typography variant='h5' component='h2'>
-              {this.props.selectedPlace.name}
-            </Typography>
-            <Typography
-              gutterBottom
-              variant='body2'
-              color='textSecondary'
-              component='h2'
-            >
-              {this.props.selectedPlace.address}
-            </Typography>
-            <Typography variant='subtitle1'>
-              {this.props.selectedPlace.phone}
-            </Typography>
-            <Link 
-              target="_blank"
-              href={this.props.selectedPlace.website}
-              variant='subtitle1'
-            >
-              Website
-            </Link>
-            <br />
-            <Input 
-              id='visit-date'
-              type="datetime-local"
-            ></Input>
-            <br />
-            <Button onClick={this.addPlace}>Add Place</Button>
+            <div style={leftSide}>
+              <Typography variant='h5' component='h2'>
+                {this.props.selectedPlace.name}
+              </Typography>
+              <Typography
+                gutterBottom
+                variant='body2'
+                color='textSecondary'
+                component='h2'
+              >
+                {this.props.selectedPlace.address}
+              </Typography>
+              <Typography variant='subtitle1'>
+                {this.props.selectedPlace.phone}
+              </Typography>
+              <CardActionArea>
+                <Link 
+                  target="_blank"
+                  href={this.props.selectedPlace.website}
+                  variant='subtitle1'
+                >
+                  Website
+                </Link>
+              </CardActionArea>
+            </div>
+            <div style={rightSide}>
+              <TextField 
+                id='visit-date'
+                style={spacing}
+                type="datetime-local"
+                defaultValue={currentTime}
+              ></TextField>
+              <TextField
+                id="notes"
+                label="Notes"
+                multiline
+                rows={4}
+                style={spacing}
+                variant="outlined"
+              />
+              <Button 
+                color="primary" 
+                onClick={this.addPlace} 
+                variant="contained"
+              >
+                Add Place
+              </Button>
+            </div>
           </Card>
         ) : null}
       </div>
