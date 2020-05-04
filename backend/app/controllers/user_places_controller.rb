@@ -1,3 +1,7 @@
+require 'nokogiri'
+require 'open-uri'
+
+
 class UserPlacesController < ApplicationController
 
   def index
@@ -17,6 +21,8 @@ class UserPlacesController < ApplicationController
       place.name = params[:name]
       place.gid = params[:place_gid]
       place.website = params[:website]
+      page = Nokogiri::HTML(open(place.website).read) 
+      place.img = page.css("meta[property='og:image']")[0]['content']
       place.save
     end
 

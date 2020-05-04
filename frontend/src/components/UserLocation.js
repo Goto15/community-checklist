@@ -14,7 +14,6 @@ class UserLocation extends React.Component{
         .then((json) => {
           if(json != null){
               let zip = null;
-              console.log(json)
               json.results[0].address_components.forEach(component => {
                 if(component.types[0] === 'postal_code'){
                   zip = component.long_name
