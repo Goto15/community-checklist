@@ -1,17 +1,29 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import { Typography, CardActions, CardMedia, Link } from '@material-ui/core';
+import { Button, Typography, CardActions, CardMedia, Link } from '@material-ui/core';
+
+const placeURL = 'http://localhost:4000/user_places/';
 
 class PlaceInfo extends React.Component {
   state = {
     image: null,
   };
 
+  deletePlace = () => {
+    fetch(placeURL + this.props.place.upid, {
+      method: 'DELETE',
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        this.props.refreshPlaces(this.props.usergid);
+      });
+  };
+
   render() {
     const card = {
       float: 'left',
-      height: '150px',
+      height: '175px',
       margin: '10px',
       padding: '15px',
       width: '400px',
@@ -39,13 +51,12 @@ class PlaceInfo extends React.Component {
           {this.props.place.address}
         </Typography>
         <Typography variant='subtitle1'>{this.props.place.phone}</Typography>
-        <Typography variant="h6">{this.props.place.visited}</Typography>
-        {
-          this.props.place.notes ? (
-            <Typography variant='body1' style={noteStyle}>
-              Notes: {this.props.place.notes}
-            </Typography>
-          ) : null }
+        <Typography variant='body2'>{this.props.place.visited}</Typography>
+        {this.props.place.notes ? (
+          <Typography variant='body1' style={noteStyle}>
+            Notes: {this.props.place.notes}
+          </Typography>
+        ) : null}
         <CardActionArea
           onClick={() => window.open(this.props.place.website, '_blank')}
         >
@@ -53,6 +64,9 @@ class PlaceInfo extends React.Component {
             <Link variant='subtitle1'>Website</Link>
           </CardActions>
         </CardActionArea>
+        <Button onClick={this.deletePlace} variant='contained' color='primary'>
+          Delete
+        </Button>
       </Card>
     );
   }

@@ -24,6 +24,11 @@ class UserPlacesController < ApplicationController
     redirect_to place_path(place.id)
   end
 
+  def destroy
+    up = UserPlace.find(params[:id])
+    render json: up.destroy
+  end
+
   def places
     user = User.find_by(gid: params[:id])
     userPlaces = UserPlace.where(user_id: user.id)
@@ -40,9 +45,9 @@ class UserPlacesController < ApplicationController
         name: place.name,
         gid: place.gid,
         website: place.website,
-        visited: place.visited,
         notes: up.notes,
-        visited: up.visited
+        visited: up.visited,
+        upid: up.id
       }
 
       placeNotes

@@ -85,7 +85,7 @@ class App extends React.Component {
   };
 
   logoutUser = () => {
-    console.log('Logging out')
+    console.log('Logging out');
     this.setState({
       user: null,
       selectedPlace: null,
@@ -187,9 +187,7 @@ class App extends React.Component {
           loggedIn={this.state.user != null}
         />
         <div className='content'>
-          {this.state.user === null ? (
-            <Landing/>
-          ) : null}
+          {this.state.user === null ? <Landing /> : null}
           {this.state.user && this.state.user.lat === null ? (
             //TODO: List out possibilities
             <UserLocation user={this.state.user} setUser={this.setUser} />
@@ -213,21 +211,25 @@ class App extends React.Component {
               ) : null}
               {
                 //TODO: Add count to Place
-                this.state.user && this.state.places
-                  ? (
-                    <Fragment>
-                    <div style={{textAlign: 'center'}}>
+                this.state.user && this.state.places ? (
+                  <Fragment>
+                    <div style={{ textAlign: 'center' }}>
                       <h2>Visited</h2>
                     </div>
-                    <div className="visited-cards" style={visitedGrid}> 
-                      {
-                        this.state.places.map((place, index) => (
-                          <PlaceInfo key={index} place={place} />
-                        )).reverse()
-                      }
+                    <div className='visited-cards' style={visitedGrid}>
+                      {this.state.places
+                        .map((place, index) => (
+                          <PlaceInfo
+                            key={index}
+                            place={place}
+                            refreshPlaces={this.getUserPlaces}
+                            usergid={this.state.user.gid}
+                          />
+                        ))
+                        .reverse()}
                     </div>
-                    </Fragment>
-                  ) : null
+                  </Fragment>
+                ) : null
               }
             </div>
           )}

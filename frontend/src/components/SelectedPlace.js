@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Button,
   Card,
-  Input,
   Link,
   TextField,
   Typography,
@@ -27,7 +26,6 @@ class SelectedPlace extends React.Component {
     let user = localStorage.getItem('User');
     let date = document.getElementById('visit-date').value;
     let notes = document.getElementById('notes').value;
-    console.log(date);
 
     fetch(userPlaceURL, {
       method: 'POST',

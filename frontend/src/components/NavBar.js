@@ -1,8 +1,8 @@
 import React from 'react';
 import Login from './Login';
-import { AppBar, Toolbar, Link, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { GoogleLogout } from 'react-google-login';
+import AccountSettings from './AccountSettings';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,11 +31,6 @@ class NavBar extends React.Component {
       minWidth: '90%',
     }
 
-    const basicBehavior = {
-      color: '#ffffff',
-      cursor: 'pointer'
-    }
-
     return (
       <div className={this.classes.root}>
         <AppBar position='static'>
@@ -49,27 +44,15 @@ class NavBar extends React.Component {
               </Typography>
             </div>
             {this.props.loggedIn ? (
-              /*
-                props
-                clientId={this.props.clientID}
-                logoutUser={this.props.logoutUser}
-
-                location change component possibly
-              */
-              <GoogleLogout
-                clientId={this.props.clientID}
-                buttonText='Log Out'
-                onLogoutSuccess={this.props.logoutUser}
-                render={(renderProps) => (
-                  <Link
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                    style={basicBehavior}
-                  >
-                    Logout
-                  </Link>
-                )}
-              />
+              <div>
+              {/*
+                <Link>Social</Link>
+              */}
+                <AccountSettings
+                  clientId={this.props.clientID}
+                  logoutUser={this.props.logoutUser}
+                />
+              </div>
             ) : (
               <Login
                 clientID={this.props.clientID}
