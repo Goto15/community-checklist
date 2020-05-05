@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from './Login';
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Link, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AccountSettings from './AccountSettings';
 
@@ -29,26 +29,34 @@ class NavBar extends React.Component {
   render() {
     const logoStyle = {
       minWidth: '90%',
-    }
+    };
+
+    const link = {
+      color: '#ffffff',
+      paddingRight: '15px',
+    };
 
     return (
       <div className={this.classes.root}>
         <AppBar position='static'>
           <Toolbar>
             <div style={logoStyle}>
-              <Typography
-                variant='h5'
-                className={this.classes.title}
-              >
+              <Typography variant='h5' className={this.classes.title}>
                 Community Checklist
               </Typography>
             </div>
             {this.props.loggedIn ? (
-              <div>
-              {/*
-                <Link>Social</Link>
-              */}
+              <div style={{ display: 'contents' }}>
+                {this.props.social ? (
+                  <Link style={link} onClick={this.props.unsetSocial}>Places</Link>
+                ) : (
+                  <Link style={link} onClick={this.props.setSocial}>
+                    Friends
+                  </Link>
+                )}
+
                 <AccountSettings
+                  user={this.props.user}
                   clientId={this.props.clientID}
                   logoutUser={this.props.logoutUser}
                 />

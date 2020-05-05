@@ -6,10 +6,6 @@ import { Button, Typography, CardActions, CardMedia, Link } from '@material-ui/c
 const placeURL = 'http://localhost:4000/user_places/';
 
 class PlaceInfo extends React.Component {
-  state = {
-    image: null,
-  };
-
   deletePlace = () => {
     fetch(placeURL + this.props.place.upid, {
       method: 'DELETE',
@@ -21,12 +17,19 @@ class PlaceInfo extends React.Component {
   };
 
   render() {
-    const card = {
+    const bigCard ={
       float: 'left',
-      height: '175px',
+      height: '350px',
       margin: '10px',
-      padding: '15px',
       width: '400px',
+    }
+
+    const card = {
+      padding: '15px'
+    };
+
+    const media = {
+      height: '150px',
     };
 
     const noteStyle = {
@@ -34,39 +37,43 @@ class PlaceInfo extends React.Component {
     };
 
     return (
-      <Card style={card} variant='outlined'>
-        {this.state.image ? (
-          <CardMedia image={this.state.image} title={this.props.place.name} />
-        ) : null}
-        <Typography variant='h5' component='h2'>
-          {this.props.place.name}
-        </Typography>
-        <Typography
-          gutterBottom
-          variant='body2'
-          color='textSecondary'
-          component='h2'
-          style={{ overflow: 'hidden' }}
-        >
-          {this.props.place.address}
-        </Typography>
-        <Typography variant='subtitle1'>{this.props.place.phone}</Typography>
-        <Typography variant='body2'>{this.props.place.visited}</Typography>
-        {this.props.place.notes ? (
-          <Typography variant='body1' style={noteStyle}>
-            Notes: {this.props.place.notes}
+      <Card style={bigCard} variant='outlined'>
+        <CardMedia
+          image={this.props.place.img}
+          style={media}
+          title={this.props.place.name}
+        />
+        <div style={card}>
+          <Typography variant='h5' component='h2'>
+            {this.props.place.name}
           </Typography>
-        ) : null}
-        <CardActionArea
-          onClick={() => window.open(this.props.place.website, '_blank')}
-        >
-          <CardActions>
-            <Link variant='subtitle1'>Website</Link>
-          </CardActions>
-        </CardActionArea>
-        <Button onClick={this.deletePlace} variant='contained' color='primary'>
-          Delete
-        </Button>
+          <Typography
+            gutterBottom
+            variant='body2'
+            color='textSecondary'
+            component='h2'
+            style={{ overflow: 'hidden' }}
+          >
+            {this.props.place.address}
+          </Typography>
+          <Typography variant='subtitle1'>{this.props.place.phone}</Typography>
+          <Typography variant='body2'>{this.props.place.visited}</Typography>
+          {this.props.place.notes ? (
+            <Typography variant='body1' style={noteStyle}>
+              Notes: {this.props.place.notes}
+            </Typography>
+          ) : null}
+          <CardActionArea
+            onClick={() => window.open(this.props.place.website, '_blank')}
+          >
+            <CardActions>
+              <Link variant='subtitle1'>Website</Link>
+            </CardActions>
+          </CardActionArea>
+          <Button onClick={this.deletePlace} variant='contained' color='primary'>
+            Delete
+          </Button>
+        </div>
       </Card>
     );
   }

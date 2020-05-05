@@ -7,6 +7,7 @@ import SelectedPlace from './components/SelectedPlace';
 import PlaceInfo from './components/PlaceInfo';
 import UserLocation from './components/UserLocation';
 import './App.css';
+import Friends from './components/Friends';
 require('dotenv').config();
 
 const userURL = 'http://localhost:4000/users/';
@@ -15,10 +16,12 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      friends: null,
       user: null,
       places: null,
       scope: 'openid profile email',
       selectedPlace: null,
+      social: false,
     };
   }
 
@@ -89,6 +92,7 @@ class App extends React.Component {
     this.setState({
       user: null,
       selectedPlace: null,
+      social: null,
       places: null,
     });
     localStorage.removeItem('User');
@@ -117,6 +121,22 @@ class App extends React.Component {
       selectedPlace: place,
     });
   };
+
+  setSocial = () => {
+    this.setState({
+      places: null,
+      selectedPlace: null,
+      social: true,
+    });
+  };
+
+  unsetSocial = () => {
+    this.setState({
+      social: false
+    })
+
+    this.getUserPlaces(this.state.user.gid)
+  }
 
   setUser = (user) => {
     this.setState({ user });
@@ -185,6 +205,10 @@ class App extends React.Component {
           signUpUser={this.signUpUser}
           logoutUser={this.logoutUser}
           loggedIn={this.state.user != null}
+          setSocial={this.setSocial}
+          social={this.state.social}
+          unsetSocial={this.unsetSocial}
+          user={this.state.user}
         />
         <div className='content'>
           {this.state.user === null ? <Landing /> : null}
@@ -209,8 +233,7 @@ class App extends React.Component {
                   setSelectedPlace={this.setSelectedPlace}
                 />
               ) : null}
-              {
-                //TODO: Add count to Place
+              { //TODO: Add count to Place
                 this.state.user && this.state.places ? (
                   <Fragment>
                     <div style={{ textAlign: 'center' }}>
@@ -229,8 +252,10 @@ class App extends React.Component {
                         .reverse()}
                     </div>
                   </Fragment>
-                ) : null
-              }
+                ) : null}
+                {this.state.social ? (
+                  <Friends></Friends>
+                ) : null}
             </div>
           )}
         </div>

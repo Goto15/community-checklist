@@ -14,7 +14,6 @@ const api_key = process.env.REACT_APP_API_KEY;
 class MapContainer extends React.Component {
   state = {
     //Map State
-    //TODO:Pull from User location
     center: {
       lat: 30.2672,
       lng: -97.7431,
@@ -34,7 +33,6 @@ class MapContainer extends React.Component {
     })
   };
 
-  //TODO: expose this to parent
   fetchUserPlaces = () => {
     fetch(userURL + this.props.user.gid + '/places', {
       method: 'GET',

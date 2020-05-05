@@ -4,23 +4,26 @@ import { AccountCircleSharp } from '@material-ui/icons';
 import { GoogleLogout } from 'react-google-login';
 
 class AccountSettings extends React.Component {
-  
   state = {
-    anchorEl: null
-  }
+    anchorEl: null,
+  };
+
+  componentDidMount = () => {
+    console.log(this.props.user);
+  };
 
   handleClick = (event) => {
     this.setState({
-      anchorEl: event.currentTarget
-    })
-  }
+      anchorEl: event.currentTarget,
+    });
+  };
 
   handleClose = () => {
     this.setState({
-      anchorEl: null
-    })
-  }
-  
+      anchorEl: null,
+    });
+  };
+
   render() {
     const basicBehavior = {
       cursor: 'pointer',
@@ -29,23 +32,33 @@ class AccountSettings extends React.Component {
     const popTopStyle = {
       paddingLeft: '15px',
       paddingRight: '15px',
-      paddingTop: '15px'
-    }
+      paddingTop: '15px',
+    };
 
     const popBotStyle = {
       paddingBottom: '15px',
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+    };
+
+    const image = {
+      border: '3px solid #ffffff',
+      borderRadius: '50%',
+      height: '36px',
+      marginLeft: '10px',
+      width: '36px',
+    };
 
     const open = this.state.anchorEl;
     const id = open ? 'simple-popover' : undefined;
 
     return (
       <div>
-        <AccountCircleSharp 
-          style={{fontSize: 35}}
-          onClick={this.handleClick}
-        />
+        {this.props.user.img ? (
+          <img src={this.props.user.img} style={image} onClick={this.handleClick} />
+        ) : null}
+        { 
+          //<AccountCircleSharp style={{ fontSize: 35 }} onClick={this.handleClick} />
+        }
         <Popover
           id={id}
           open={open}
@@ -60,10 +73,8 @@ class AccountSettings extends React.Component {
             horizontal: 'center',
           }}
         >
-          <Typography style={popTopStyle}>
-            Account Settings
-          </Typography>
-          <hr/>
+          <Typography style={popTopStyle}>Account Settings</Typography>
+          <hr />
           <div style={popBotStyle}>
             <GoogleLogout
               clientId={this.props.clientID}
@@ -71,7 +82,7 @@ class AccountSettings extends React.Component {
               onLogoutSuccess={this.props.logoutUser}
               render={(renderProps) => (
                 <Link
-                  color="primary"
+                  color='primary'
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
                   style={basicBehavior}
