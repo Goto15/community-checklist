@@ -1,15 +1,10 @@
 import React from 'react';
 import { Link, Popover, Typography } from '@material-ui/core';
-import { AccountCircleSharp } from '@material-ui/icons';
 import { GoogleLogout } from 'react-google-login';
 
 class AccountSettings extends React.Component {
   state = {
     anchorEl: null,
-  };
-
-  componentDidMount = () => {
-    console.log(this.props.user);
   };
 
   handleClick = (event) => {
@@ -54,7 +49,7 @@ class AccountSettings extends React.Component {
     return (
       <div>
         {this.props.user.img ? (
-          <img src={this.props.user.img} style={image} onClick={this.handleClick} />
+          <img alt="User Settings" src={this.props.user.img} style={image} onClick={this.handleClick} />
         ) : null}
         { 
           //<AccountCircleSharp style={{ fontSize: 35 }} onClick={this.handleClick} />

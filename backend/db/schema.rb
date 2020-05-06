@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_181546) do
   create_table "friends", force: :cascade do |t|
     t.integer "friend_one"
     t.integer "friend_two"
+    t.boolean "accepted"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_181546) do
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
+    t.string "full_name"
     t.string "email"
     t.string "img"
     t.string "gid"

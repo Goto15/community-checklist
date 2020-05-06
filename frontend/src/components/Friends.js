@@ -1,22 +1,35 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import FriendInfo from './FriendInfo';
 import { TextField, Button } from '@material-ui/core';
 
+const findFriends = 'http://localhost:4000/search/users/';
+
 class Friends extends React.Component {
+  state = {
+    searchResults: null,
+  };
 
-  findFriend = () => {
-    
-  }
-
-  submitFriend = (event) => {
-    if (event.key === 'Enter') {
-      console.log('OOOOOPSIES DOOPSIE: ' + event.target.value);
-    }
+  findFriend = (event) => {
+    fetch(findFriends + event.target.value, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((resp) => resp.json())
+      .then((json) => {
+        this.setState({
+          searchResults: json,
+        });
+      });
   };
 
   render() {
     const searchBox = {
       display: 'flex',
       margin: '0 auto',
+      paddingBottom: '35px',
       paddingTop: '20px',
       textAlign: 'center',
       width: '70%',
@@ -27,19 +40,29 @@ class Friends extends React.Component {
       width: '100%',
     };
 
+    const profiles = {
+      margin: '0 auto',
+      width: '80%',
+    };
+
     return (
-      <div style={searchBox}>
-        <TextField
-          label='Find friends...'
-          onChange={this.findFriend}
-          onKeyPress={this.submitFriend}
-          type='text'
-          style={search}
-        ></TextField>
-        <Button color='primary' onClick={this.submitFriend} variant='contained'>
-          Search
-        </Button>
-      </div>
+      <Fragment>
+        <div style={searchBox}>
+          <TextField
+            label='Find friends...'
+            onChange={this.findFriend}
+            type='text'
+            style={search}
+          />
+        </div>
+        <div style={profiles}>
+          {this.state.searchResults
+            ? this.state.searchResults.map((user, index) => {
+                return <FriendInfo user={user} key={index} />;
+              })
+            : null}
+        </div>
+      </Fragment>
     );
   }
 }

@@ -6,6 +6,7 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
+    user.full_name = user.first_name + " " + user.last_name
 
     if user.save
       render json: user
@@ -30,6 +31,21 @@ class UsersController < ApplicationController
 
   def places
     render json: User.find_by(gid: params[:id]).places
+  end
+
+  def find_friends
+    if !params[:search_string].blank?
+      search_name = params[:search_string].strip.downcase
+
+      first_results = User.all.where("lower(first_name) LIKE :search", search: "%#{search_name}%")
+      last_results = User.all.where("lower(last_name) LIKE :search", search: "%#{search_name}%")
+      full_results = User.all.where("lower(full_name) LIKE :search", search: "%#{search_name}%")
+      results = full_results + first_results + last_results
+
+      render json: results.uniq[0..9]
+    else
+      render json: ""
+    end
   end
 
   private
