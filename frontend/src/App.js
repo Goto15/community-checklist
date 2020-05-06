@@ -132,11 +132,11 @@ class App extends React.Component {
 
   unsetSocial = () => {
     this.setState({
-      social: false
-    })
+      social: false,
+    });
 
-    this.getUserPlaces(this.state.user.gid)
-  }
+    this.getUserPlaces(this.state.user.gid);
+  };
 
   setUser = (user) => {
     this.setState({ user });
@@ -233,7 +233,8 @@ class App extends React.Component {
                   setSelectedPlace={this.setSelectedPlace}
                 />
               ) : null}
-              { //TODO: Add count to Place
+              {
+                //TODO: Add count to Place
                 this.state.user && this.state.places ? (
                   <Fragment>
                     <div style={{ textAlign: 'center' }}>
@@ -252,10 +253,9 @@ class App extends React.Component {
                         .reverse()}
                     </div>
                   </Fragment>
-                ) : null}
-                {this.state.social ? (
-                  <Friends></Friends>
-                ) : null}
+                ) : null
+              }
+              {this.state.social ? <Friends></Friends> : null}
             </div>
           )}
         </div>

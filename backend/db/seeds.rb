@@ -6,6 +6,11 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# Users
+User.create(first_name: "Sarah", last_name: "Thompson", full_name: "Sarah Thompson", email: "asdfasdfa", gid: 12341234)
+User.create(first_name: "Caleb", last_name: "Upson", full_name: "Caleb Upson", email: "asgghdfgyjd", gid: 3735421)
+User.create(first_name: "Tim", last_name: "Cavell", full_name: "Tim Cavell", email: "asdfhgsdfa", gid: 13837449)
+
 # Types
 types = [
   'accounting',

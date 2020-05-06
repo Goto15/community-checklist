@@ -6,4 +6,20 @@ class User < ApplicationRecord
 
   validates :email, uniqueness: true
   validates :gid, uniqueness: true
+
+  def friends
+    if Friend.where(:friend_one => self.id)
+      friends = Friend.where(friend_one: self.id).or(Friend.where(friend_two: self.id))
+    end
+
+    friends = friends.map do |friend|
+      if friend.friend_one != self
+        friend = friend.friend_one
+      else 
+        friend = friend.friend_two
+      end
+    end
+
+    friends
+  end
 end

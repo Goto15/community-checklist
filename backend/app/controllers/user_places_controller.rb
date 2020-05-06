@@ -22,16 +22,13 @@ class UserPlacesController < ApplicationController
       place.gid = params[:place_gid]
       place.website = params[:website]
       place.img = ''
-      puts '=============================='
       begin
         page = Nokogiri::HTML(open(place.website).read)
         ogImg = page.css("meta[property='og:image']")
         place.img = ogImg[0]['content']
-      rescue Exception => e # Never do this!
+      rescue Exception => e
         print e
       end
-      puts place.img
-      puts '=============================='
       place.save
     end
 
