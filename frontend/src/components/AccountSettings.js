@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Popover, Typography } from '@material-ui/core';
+import { Button, Link, Popover, Typography } from '@material-ui/core';
 import { GoogleLogout } from 'react-google-login';
 
 class AccountSettings extends React.Component {
@@ -49,9 +49,14 @@ class AccountSettings extends React.Component {
     return (
       <div>
         {this.props.user.img ? (
-          <img alt="User Settings" src={this.props.user.img} style={image} onClick={this.handleClick} />
+          <img
+            alt='User Settings'
+            src={this.props.user.img}
+            style={image}
+            onClick={this.handleClick}
+          />
         ) : null}
-        { 
+        {
           //<AccountCircleSharp style={{ fontSize: 35 }} onClick={this.handleClick} />
         }
         <Popover
@@ -71,19 +76,29 @@ class AccountSettings extends React.Component {
           <Typography style={popTopStyle}>Account Settings</Typography>
           <hr />
           <div style={popBotStyle}>
+            <br />
+            <Button
+              color='primary'
+              style={basicBehavior}
+              onClick={this.props.changeLocation}
+            >
+              Change Location
+            </Button>
+            <br />
+            <br />
             <GoogleLogout
               clientId={this.props.clientID}
               buttonText='Log Out'
               onLogoutSuccess={this.props.logoutUser}
               render={(renderProps) => (
-                <Link
+                <Button
                   color='primary'
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
                   style={basicBehavior}
                 >
                   Logout
-                </Link>
+                </Button>
               )}
             />
           </div>

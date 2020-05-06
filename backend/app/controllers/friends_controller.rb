@@ -8,7 +8,7 @@ class FriendsController < ApplicationController
     if ship.save
       render json: ship
     else
-      render :action => "new"
+      render json: "You're already friends!"
     end 
   end
 

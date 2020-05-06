@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import FriendInfo from './FriendInfo';
-import { TextField, Button } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 const findFriends = 'http://localhost:4000/search/users/';
-const friendsPlaces = 'http://localhost:4000/users/';
 
 class Friends extends React.Component {
   state = {
@@ -24,6 +23,12 @@ class Friends extends React.Component {
           searchResults: json,
         });
       });
+  };
+
+  resetSearchResults = () => {
+    this.setState({
+      searchResults: null,
+    });
   };
 
   render() {
@@ -60,7 +65,13 @@ class Friends extends React.Component {
         <div style={profiles}>
           {this.state.searchResults
             ? this.state.searchResults.map((user, index) => {
-                return <FriendInfo user={user} key={index} />;
+                return (
+                  <FriendInfo
+                    user={user}
+                    key={index}
+                    resetSearchResults={this.resetSearchResults}
+                  />
+                );
               })
             : null}
         </div>

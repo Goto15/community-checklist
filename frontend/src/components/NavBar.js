@@ -59,6 +59,7 @@ class NavBar extends React.Component {
                   user={this.props.user}
                   clientId={this.props.clientID}
                   logoutUser={this.props.logoutUser}
+                  changeLocation={this.props.changeLocation}
                 />
               </div>
             ) : (

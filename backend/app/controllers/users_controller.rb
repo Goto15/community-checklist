@@ -52,6 +52,10 @@ class UsersController < ApplicationController
     render json: User.find_by(gid: params[:id]).find_friends_places
   end
 
+  def user_friends
+    render json: User.find_by(gid: params[:id]).friends
+  end
+
   private
 
   def user_params

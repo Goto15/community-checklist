@@ -157,6 +157,15 @@ class App extends React.Component {
     });
   };
 
+  changeLocation = () => {
+    let userLat = this.state.user
+    userLat.lat = null
+    console.log(userLat)
+    this.setState({
+      user: userLat
+    })
+  }
+
   unsetSocial = () => {
     this.setState({
       social: false,
@@ -217,7 +226,8 @@ class App extends React.Component {
     };
 
     const visitedGrid = {
-      marginLeft: '2%',
+      marginLeft: '4%',
+      paddingTop: '25px',
       width: '100vw',
     };
 
@@ -228,6 +238,7 @@ class App extends React.Component {
         {this.state.user ? localStorage.setItem('User', this.state.user.gid) : null}
         <NavBar
           clientID={clientID}
+          changeLocation={this.changeLocation}
           loginUser={this.loginUser}
           signUpUser={this.signUpUser}
           logoutUser={this.logoutUser}
@@ -267,9 +278,6 @@ class App extends React.Component {
                 //TODO: Add count to Place
                 this.state.user && this.state.places ? (
                   <Fragment>
-                    <div style={{ textAlign: 'center' }}>
-                      <h2>Visited</h2>
-                    </div>
                     <div className='visited-cards' style={visitedGrid}>
                       {this.state.places
                         .map((place, index) => (

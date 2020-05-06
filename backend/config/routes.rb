@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :types
   resources :place_types
 
+  get '/users/:id/friends', to: 'users#user_friends'
   get '/users/:id/places', to: 'user_places#places'
   get '/users/:id/friendplaces', to: 'users#friends_places'
   get '/search/users/:search_string', to: 'users#find_friends'

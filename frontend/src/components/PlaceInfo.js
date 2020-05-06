@@ -19,7 +19,7 @@ class PlaceInfo extends React.Component {
   render() {
     const bigCard ={
       float: 'left',
-      height: '500px',
+      height: '525px',
       margin: '10px',
       width: '300px',
     }
@@ -68,12 +68,13 @@ class PlaceInfo extends React.Component {
           ) : null}
           <CardActionArea
             onClick={() => window.open(this.props.place.website, '_blank')}
+            style={{marginBottom: '10px'}}
           >
             <CardActions>
               <Link variant='subtitle1'>Website</Link>
             </CardActions>
           </CardActionArea>
-          <Button onClick={this.deletePlace} variant='contained' color='primary' style={{position: 'relative', bottom: '0'}}>
+          <Button onClick={this.deletePlace} variant='contained' color='primary'>
             Delete
           </Button>
         </div>
