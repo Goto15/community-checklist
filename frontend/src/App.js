@@ -17,6 +17,7 @@ class App extends React.Component {
     super();
     this.state = {
       friends: null,
+      friendsPlaces: null,
       user: null,
       places: null,
       scope: 'openid profile email',
@@ -27,6 +28,7 @@ class App extends React.Component {
 
   componentDidMount = () => {
     this.checkForUser();
+    this.setFriendsPlaces();
   };
 
   /* User persistence and handle local storage information */
@@ -94,6 +96,8 @@ class App extends React.Component {
       selectedPlace: null,
       social: null,
       places: null,
+      friends: null,
+      friendsPlaces: null,
     });
     localStorage.removeItem('User');
   };
@@ -116,9 +120,32 @@ class App extends React.Component {
     return userInfo;
   };
 
+  setFriendsPlaces = () => {
+    let user = localStorage.getItem('User');
+    fetch(userURL + user + '/friendplaces', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((resp) => resp.json())
+      .then((places) => {
+        this.setState({
+          friendsPlaces: places,
+        });
+      });
+  };
+
   setSelectedPlace = (place) => {
     this.setState({
       selectedPlace: place,
+    });
+  };
+
+  closeSelectedPlace = () => {
+    this.setState({
+      selectedPlace: null,
     });
   };
 
@@ -223,10 +250,13 @@ class App extends React.Component {
                   user={this.state.user}
                   setSelectedPlace={this.setSelectedPlace}
                   places={this.state.places}
+                  friendsPlaces={this.state.friendsPlaces}
+                  social={this.state.social}
                 />
               ) : null}
               {this.state.selectedPlace != null ? (
                 <SelectedPlace
+                  closeSelectedPlace={this.closeSelectedPlace}
                   selectedPlace={this.state.selectedPlace}
                   getUserPlaces={this.getUserPlaces}
                   parseUserInfo={this.parseUserInfo}

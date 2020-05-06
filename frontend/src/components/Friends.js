@@ -3,6 +3,7 @@ import FriendInfo from './FriendInfo';
 import { TextField, Button } from '@material-ui/core';
 
 const findFriends = 'http://localhost:4000/search/users/';
+const friendsPlaces = 'http://localhost:4000/users/';
 
 class Friends extends React.Component {
   state = {

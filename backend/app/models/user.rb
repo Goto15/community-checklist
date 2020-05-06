@@ -22,4 +22,13 @@ class User < ApplicationRecord
 
     friends
   end
+
+  def find_friends_places
+    self.friends.map do |friend| 
+      {
+        friend: friend,
+        places: friend.places 
+      }
+    end
+  end
 end

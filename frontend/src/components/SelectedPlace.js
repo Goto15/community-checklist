@@ -49,34 +49,41 @@ class SelectedPlace extends React.Component {
       .then((resp) => resp.json())
       .then((json) => {
         this.props.getUserPlaces(localStorage.getItem('User'));
-        this.props.setSelectedPlace(null)
+        this.props.setSelectedPlace(null);
       });
   };
 
   render() {
+    const button = {
+      color: 'red',
+    };
+
     const card = {
+      boxShadow: '0px 10px 6px -6px #777',
       margin: '0 auto',
       marginTop: '18px',
-      minWidth: '60%',
+      minWidth: '55%',
       padding: '15px',
-      width: '50%'
+      position: 'relative',
+      top: '-40px',
+      width: '50%',
     };
 
     const leftSide = {
       display: 'grid',
       float: 'left',
-      maxWidth: '50%'
-    }
+      maxWidth: '50%',
+    };
 
     const rightSide = {
       display: 'grid',
-      float: 'right'
-    }
+      float: 'right',
+      width: '50%',
+    };
 
     const spacing = {
-      marginBottom: '15px'
-    }
-    //TODO: Add place information before button
+      marginBottom: '15px',
+    };
 
     let currentTime = new Date().toLocaleString();
 
@@ -84,9 +91,6 @@ class SelectedPlace extends React.Component {
       <div>
         {this.props.selectedPlace ? (
           <Card style={card} variant='outlined'>
-            {
-              //Add og:image here in CardMedia
-            }
             <div style={leftSide}>
               <Typography variant='h5' component='h2'>
                 {this.props.selectedPlace.name}
@@ -103,8 +107,8 @@ class SelectedPlace extends React.Component {
                 {this.props.selectedPlace.phone}
               </Typography>
               <CardActionArea>
-                <Link 
-                  target="_blank"
+                <Link
+                  target='_blank'
                   href={this.props.selectedPlace.website}
                   variant='subtitle1'
                 >
@@ -113,25 +117,26 @@ class SelectedPlace extends React.Component {
               </CardActionArea>
             </div>
             <div style={rightSide}>
-              <TextField 
+              <div style={{ textAlign: 'right' }}>
+                <Button style={button} variant='outlined' onClick={this.props.closeSelectedPlace}>
+                  X
+                </Button>
+              </div>
+              <TextField
                 id='visit-date'
                 style={spacing}
-                type="datetime-local"
+                type='datetime-local'
                 defaultValue={currentTime}
               ></TextField>
               <TextField
-                id="notes"
-                label="Notes"
+                id='notes'
+                label='Notes'
                 multiline
                 rows={4}
                 style={spacing}
-                variant="outlined"
+                variant='outlined'
               />
-              <Button 
-                color="primary" 
-                onClick={this.addPlace} 
-                variant="contained"
-              >
+              <Button color='primary' onClick={this.addPlace} variant='contained'>
                 Add Place
               </Button>
             </div>

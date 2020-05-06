@@ -19,9 +19,9 @@ class PlaceInfo extends React.Component {
   render() {
     const bigCard ={
       float: 'left',
-      height: '350px',
+      height: '500px',
       margin: '10px',
-      width: '400px',
+      width: '300px',
     }
 
     const card = {
@@ -33,6 +33,9 @@ class PlaceInfo extends React.Component {
     };
 
     const noteStyle = {
+      maxHeight: '100px',
+      overflowX: 'hidden',
+      overflowY: 'auto',
       padding: '5px',
     };
 
@@ -60,7 +63,7 @@ class PlaceInfo extends React.Component {
           <Typography variant='body2'>{this.props.place.visited}</Typography>
           {this.props.place.notes ? (
             <Typography variant='body1' style={noteStyle}>
-              Notes: {this.props.place.notes}
+              {this.props.place.notes}
             </Typography>
           ) : null}
           <CardActionArea
@@ -70,7 +73,7 @@ class PlaceInfo extends React.Component {
               <Link variant='subtitle1'>Website</Link>
             </CardActions>
           </CardActionArea>
-          <Button onClick={this.deletePlace} variant='contained' color='primary'>
+          <Button onClick={this.deletePlace} variant='contained' color='primary' style={{position: 'relative', bottom: '0'}}>
             Delete
           </Button>
         </div>

@@ -1,11 +1,7 @@
 import React from 'react';
 import MapSearch from './MapSearch';
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  // StandaloneSearchBox,
-} from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+//import './MapContainer.css';
 require('dotenv').config();
 
 const userURL = 'http://localhost:4000/users/';
@@ -28,9 +24,13 @@ class MapContainer extends React.Component {
     this.setState({
       center: {
         lat: this.props.user.lat,
-        lng: this.props.user.lng
-      }
-    })
+        lng: this.props.user.lng,
+      },
+    });
+  };
+
+  adjustMarkerIcon = () => {
+    document.getElementsByClassName('markerTime');
   };
 
   fetchUserPlaces = () => {
@@ -55,7 +55,6 @@ class MapContainer extends React.Component {
   };
 
   render() {
-
     //TODO: Only create markers for unique entries
     return (
       <LoadScript
@@ -66,29 +65,45 @@ class MapContainer extends React.Component {
         <GoogleMap
           id='example-map'
           mapContainerStyle={{
-            height: '50vh',
-            width: '100vw',
+            height: '55vh',
+            width: '99vw',
           }}
           zoom={14}
           center={this.state.center}
         >
-          <MapSearch 
-            setSelectedPlace={this.props.setSelectedPlace}
-          />
-          {this.props.places ? (
-              this.props.places.map((p, index) => {
-              return (
-                <Marker
-                  key={index}
-                  position={{
-                    lat: p.lat,
-                    lng: p.lng,
-                  }}
-                  onClick={(event) => this.onMarkerClick(event, p)}
-                />
-              );
-            })
-          ) : null}
+          <MapSearch setSelectedPlace={this.props.setSelectedPlace} />
+          {this.props.places
+            ? this.props.places.map((p, index) => {
+                return (
+                  <Marker
+                    key={index}
+                    position={{
+                      lat: p.lat,
+                      lng: p.lng,
+                    }}
+                    title={p.name}
+                    onClick={(event) => this.onMarkerClick(event, p)}
+                  />
+                );
+              })
+            : null}
+          {this.props.friendsPlaces && this.props.social
+            ? this.props.friendsPlaces.map((f) =>
+                f.places.map((p, index) => {
+                  return (
+                    <Marker
+                      key={index}
+                      position={{
+                        lat: p.lat,
+                        lng: p.lng,
+                      }}
+                      title={f.friend.full_name}
+                      onClick={(event) => this.onMarkerClick(event, p)}
+                    />
+                  );
+                })
+              )
+            : null}
         </GoogleMap>
       </LoadScript>
     );
